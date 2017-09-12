@@ -26,7 +26,7 @@ struct containerrec {
  */
 void container_add(container c, char *word) {
     if (c->type == RED_BLACK_TREE) {
-        c->contents = rbt_insert(c->contents, word);
+        c->contents = root_fix(rbt_insert(c->contents, word));
     } else {
         flexarray_append(c->contents, word);
     }
@@ -86,10 +86,10 @@ int container_search(container c, char *target) {
   @param c is container to print
   @param f will take the print function to be used
 */
-void container_print(container c, void f(char *word), FILE *stream) {
+void container_print(container c, void f(char *word)) {
     if (c->type == RED_BLACK_TREE) {
-        rbt_preorder(c->contents, f, stream);
+        rbt_preorder(c->contents, f);
     } else {
-        flexarray_visit(c->contents, f, stream);
+        flexarray_visit(c->contents, f);
     }
 }

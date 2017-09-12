@@ -36,8 +36,8 @@ void *erealloc(void *p, size_t s) {
 /*Prints a given word using printf.
   @param s is the word to print
  */
-void print_word(FILE *stream, char *s) {
-    fprintf(stream, "%s ", s);
+void print_word(char *s) {
+    printf("%s ", s);
 }
 
 /*

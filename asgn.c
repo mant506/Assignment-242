@@ -118,7 +118,7 @@ int main (int argc, char **argv) {
             }
             start = clock();
             while (getword(word, sizeof word, stdin) != EOF) {
-                if (htable_search(t, word) != 1) {
+                if (htable_search(t, word) == 0) {
                     unknown_words++;
                     printf("%s not spelt correctly\n", word);
                 }
@@ -140,7 +140,7 @@ int main (int argc, char **argv) {
             }
             start = clock();
             while (getword(word, sizeof word, stdin) != EOF) {
-                if (htable_search(t, word) != 1) {
+                if (htable_search(t, word) == 0) {
                     unknown_words++;
                     printf("%s not spelt correctly\n", word);
                 }
@@ -172,6 +172,8 @@ int main (int argc, char **argv) {
             }
         }
     }
+
+    /* if search = 0 instaed != 1 */
     printf("Insert and Search Complete\n");
     fclose(infile);
     htable_free(t);

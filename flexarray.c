@@ -32,22 +32,6 @@ flexarray flexarray_new() {
     return result;
 }
 
-/* Insertion sort algorith to sort items in array
-   Input - words is array to be sorted
-   - n is the amount of items in array
-*/
-static void insertion_sort(char **words, int n) {
-    int i;
-    for (i = 1; i < n; i++) {   
-        char *key = words[i];
-        int index = i;
-        while (index > 0 && strcmp(words[index-1],key) > 0) {
-            index--;
-            words[index+1] = words[index];
-        }
-        words[index] = key;        
-    }
-}
 
 /* Searches through a flexarray and returns whether an item is present
    Input - f is the flexarray to search
@@ -68,10 +52,10 @@ int flexarray_is_present(flexarray f, char *target) {
    Inputs - f is flexarray to visit
    - function is the function to apply to each item
 */
-void flexarray_visit(flexarray f, void func(char *str), FILE *stream) {
+void flexarray_visit(flexarray f, void func(char *str)) {
     int i;
     for (i = 0; i < f->itemcount; i++) {
-        func(stream, f->items[i]);
+        func(f->items[i]);
     }
 }
 
@@ -91,25 +75,6 @@ void flexarray_append(flexarray f, char *item) {
     f->items[f->itemcount] = emalloc((strlen(item)+1) * sizeof f->items[0][0]);
     strcpy(f->items[f->itemcount], item);
     f->itemcount++;
-}
-
-/* Prints items in array on new lines
-   Input - f is the flexarray to be printed
-*/
-void flexarray_print(flexarray f) {
-    /* a "for" loop to print out each cell of f->items */
-    int i;
-    for (i = 0; i < f->itemcount; i++) {
-        printf("%s ", f->items[i]); 
-    }
-    printf("\n");
-}
-
-/* Calls insertion sort passing it the array of items and item count
-   Input - f is the flex array that contains array to be printed
-*/
-void flexarray_sort(flexarray f) {
-    insertion_sort(f->items, f->itemcount);
 }
 
 /* Frees all the memory the flex array is using

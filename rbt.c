@@ -48,9 +48,7 @@ rbt rbt_new() {
 int rbt_search(rbt b, char *str) {
     if (NULL == b) {
         return 0;
-    } else if (strcmp(b->key,str) == 0) {
-        return 1;
-    } else if (strcmp(b->key,str) > 0) {
+    }  else if (strcmp(b->key,str) > 0) {
         rbt_search(b->left,str);
     } else if (strcmp(b->key,str) < 0) {
         rbt_search(b->right,str);
@@ -85,7 +83,7 @@ static rbt left_rotate(rbt b) {
   @param b is the rbt to fix
   @return is the fixed root
  */
-static rbt rbt_rootfix(rbt b) {
+rbt root_fix(rbt b) {
     b->colour = BLACK;
     return b;
 }
@@ -96,7 +94,7 @@ static rbt rbt_rootfix(rbt b) {
   @param b is the rbt to fix
   @return the fixed rbt
  */
-static rbt rbt_specfix(rbt b) {
+static rbt rbt_fix(rbt b) {
     if (IS_RED(b->left) && IS_RED(b->left->left)) {
         if (IS_RED(b->right)) {
             b->colour = RED;
@@ -143,17 +141,6 @@ static rbt rbt_specfix(rbt b) {
     return b;
 }
 
-/*Combines the two fix methods to satisfy
-  all of the rbt specifications
-  @param b is the rbt to fix
-  @return is the fixed root
-*/
-static rbt rbt_fix(rbt b) {
-    b = rbt_specfix(b);
-    b = rbt_rootfix(b);
-    return b;
-}
-
 /*Inserts a string into given rbt in
   the appropriate position and
   fixes to ensure the tree is correct.
@@ -197,20 +184,7 @@ rbt rbt_free(rbt b) {
     return b;
 }
 
-/*Performs a given function on all items
-  through inorder traversal (print used
-  for this assignment).
-  @param b is rbt to traverse
-  @f is the function to perform
- */
-void rbt_inorder(rbt b, void f(char *str), FILE *stream) {
-    if (NULL == b) {
-        return;
-    }
-    rbt_inorder(b->left,f);
-    f(stream, b->key);
-    rbt_inorder(b->right,f);
-}
+
 
 /*Performs a given function on all items
   through preorder traversal (print used
@@ -218,65 +192,19 @@ void rbt_inorder(rbt b, void f(char *str), FILE *stream) {
   @param b is rbt to traverse
   @f is the function to perform
 */
-void rbt_preorder(rbt b, void f(char *str1), FILE *stream) {
+void rbt_preorder(rbt b, void f(char *str1)) {
+    int i;
     if (NULL == b) {
         return;
     }
-    f(stream, b->key);
+    for (i = 0; i < b->count; i++) {
+        f(b->key);
+    }
     rbt_preorder(b->left,f);
     rbt_preorder(b->right,f);
 }
 
-/*Deletes a given string from a given rbt
-  if that string exists.
-  @param b is rbt to delete from
-  @param str is string to be deleted
-  @return b is the updated rbt
- */
-rbt rbt_delete(rbt b, char *str) {
-    rbt t;
-    rbt sucessor = NULL;
-    if (b == NULL) {;
-        return NULL;
-    }
-    if (strcmp(b->key,str) == 0) {
-        if (NULL == b->left && NULL == b->right) {
-            free(b->key);
-            free(b);
-            return NULL;
-        } else if (NULL != b->right && NULL != b->left) {;
-            t = b;
-            sucessor = b->right;
-            while (NULL != sucessor->left) {
-                t = sucessor;
-                sucessor = sucessor->left;
-            }
-            t->left = sucessor->right;
-            free(b->key);
-            b->key = sucessor->key;
-            free(sucessor);
-            return b;
-            
-        } else if (NULL != b->left) {
-            t = b->left;
-            free(b->key);
-            free(b);
-            return t;
-        } else if (NULL != b->right) {;
-            t = b->right;
-            free(b->key);
-            free(b);
-            return t;
-        }                                               
-    } else if (strcmp(b->key,str) > 0) {
-        b->left = rbt_delete(b->left,str);
-        return b;
-    } else if (strcmp(b->key,str) < 0) {;
-        b->right = rbt_delete(b->right,str);
-        return b;
-    }
-    return b;
-}
+
 
 
 

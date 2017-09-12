@@ -25,15 +25,6 @@ struct htablerec {
     unsigned int capacity;
 };
 
-/*Finds the appropriate index step to take when
-  searching through the array.
-  @param h is the htable to be navigated
-  @i_key is the intial point
-  @return the step to take
- */
-static unsigned int htable_step(htable h, unsigned int i_key) {
-    return 1 + (i_key % (h->capacity - 1));
-}
 
 /*Converts the key to appropriate index position.
   @param word is the string to convert to index
@@ -94,8 +85,6 @@ void htable_free(htable h) {
 int htable_insert(htable h, char *str, char container_type) {
     
     unsigned int index = htable_word_to_int(str) % h->capacity;
-    int step = htable_step(h, index);
-    unsigned int i = index;
     /* container is empty */
     if (h->containers[index] == NULL) { 
         if (container_type == 'r') {    /* rbt */
@@ -108,32 +97,10 @@ int htable_insert(htable h, char *str, char container_type) {
         h->num_keys++;
         return 1;
     /* if input is already in container */
-    } else if (container_search(h->containers[index], str) == 1) {
+    } else {
         container_add(h->containers[index], str);
         h->frequencies[index]++;
         return h->frequencies[index];
-    /* finds next free container or a matching comparison */
-    } else {
-        do {
-            index = (index + step) % h->capacity;
-        } while (h->containers[index] != NULL && container_search(h->containers[index], str) != 1  && index != i);
-        /* finds empty container */
-        if (h->containers[index] == NULL) {
-            if (container_type == 'r') { /* rbt */
-                h->containers[index] = container_new_rbt();
-            } else {                     /* flexarray */
-                h->containers[index] = container_new_flexarray();
-            }
-            h->frequencies[index] = 1;
-            h->num_keys++;
-        /* finds matching comparison */
-        } else if (container_search(h->containers[index], str)) {
-            container_add(h->containers[index], str); 
-            h->frequencies[index]++;
-            return h->frequencies[index];
-        } else {
-            return 0;
-        }
     }
     return 1;
 }
@@ -148,8 +115,8 @@ void htable_print(htable h, FILE *stream) {
     unsigned int i;
     for (i = 0; i < h->capacity; i++) {
         if (h->frequencies[i] != 0) {
-            fprintf(stream, "Index: %d, Frequency: %d ", i, h->frequencies[i]);
-            container_print(h->containers[i], print_word, stream);
+            fprintf(stream, "%d ", i);
+            container_print(h->containers[i], print_word);
             printf("\n");
         }
     }
@@ -163,18 +130,7 @@ void htable_print(htable h, FILE *stream) {
   @return 0 if not found, otherwise frequency of the string
  */
 int htable_search(htable h, char *str) {
-    unsigned int collisions = 0;
     unsigned int index = htable_word_to_int(str) % h->capacity;
-    int step = htable_step(h, index);
-    unsigned int i = index;
-    while (h->containers[index] != NULL && container_search(h->containers[index], str) != 1  && index != i) {
-        index = (index + step) % h->capacity;
-        collisions++;
-    }
-    if (collisions >= h->capacity) {
-        return 0;
-    } else {
-        return h->frequencies[index];
-    }
+    return container_search(h->containers[index], str);
 }
 
