@@ -1,6 +1,6 @@
 /* RBT (red black tree) functions used in cosc242 assignment
    11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
+   Authors Taylor Manning, Callan Taylor, Luke Falvey
 */
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,8 +23,6 @@ struct rbt_node {
     char *key;
     /* Color of the root node. */
     rbt_colour colour;
-    /* Black count of the tree. */
-    int count;
     /* Left child node. */
     rbt left;
     /* Right child node. */
@@ -32,7 +30,7 @@ struct rbt_node {
 };
 
 /*Creates new rbt, assigns root to null.
-  @return new is the rbt
+  Returns: new is the rbt
  */
 rbt rbt_new() {
     rbt new = NULL;
@@ -41,9 +39,9 @@ rbt rbt_new() {
 
 /*Recursively searches through a rbt for a
   given string and determines if present.
-  @param b is the rbt to search
-  @param str is the string to search for
-  @return 1 if found, 0 if not
+  Parameters: b is the rbt to search
+  Parameters: str is the string to search for
+  Returns: 1 if found, 0 if not
  */
 int rbt_search(rbt b, char *str) {
     if (NULL == b) {
@@ -59,8 +57,8 @@ int rbt_search(rbt b, char *str) {
 }
 
 /*Rotates the rbt to the right.
-  @param b is the rbt to rotate
-  @return the updated rbt
+  Parameters: b is the rbt to rotate
+  Returns: the updated rbt
  */
 static rbt right_rotate(rbt b) {
     rbt temp = b;
@@ -70,8 +68,8 @@ static rbt right_rotate(rbt b) {
     return b;
 }
 /*Rotates the rbt to the left.
-  @param b is the rbt to rotate
-  @return the updated rbt
+  Parameters: b is the rbt to rotate
+  Returns: the updated rbt
  */
 static rbt left_rotate(rbt b) {
     rbt temp = b;
@@ -82,8 +80,8 @@ static rbt left_rotate(rbt b) {
 }
 
 /*Fixes the root to be black.
-  @param b is the rbt to fix
-  @return is the fixed root
+  Parameters: b is the rbt to fix
+  Returns: is the fixed root
  */
 rbt root_fix(rbt b) {
     b->colour = BLACK;
@@ -93,8 +91,8 @@ rbt root_fix(rbt b) {
 /*Fixes the colors of the rbt to
   fit specifications of a rbt except
   root being black.
-  @param b is the rbt to fix
-  @return the fixed rbt
+  Parameters: b is the rbt to fix
+  Returns: the fixed rbt
  */
 static rbt rbt_fix(rbt b) {
     if (IS_RED(b->left) && IS_RED(b->left->left)) {
@@ -146,9 +144,9 @@ static rbt rbt_fix(rbt b) {
 /*Inserts a string into given rbt in
   the appropriate position and
   fixes to ensure the tree is correct.
-  @param b is rbt to insert into
-  @param str is the string to insert
-  @return the new rbt
+  Parameters: b is rbt to insert into
+  Parameters: str is the string to insert
+  Returns: the new rbt
  */
 rbt rbt_insert(rbt b, char *str) {
     if (NULL == b) {
@@ -156,7 +154,6 @@ rbt rbt_insert(rbt b, char *str) {
         b->colour = RED;
         b->left = NULL;
         b->right = NULL;
-        b->count = 1;
         b->key = emalloc((strlen(str) + 1) * sizeof(b->key));
         strcpy(b->key, str);
         return b;
@@ -165,15 +162,15 @@ rbt rbt_insert(rbt b, char *str) {
     } else if (strcmp(b->key,str) < 0) {
         b->right = rbt_insert(b->right,str);
     } else if (strcmp(b->key,str) == 0) {
-        b->count++;
+        b->left = rbt_insert(b->left,str);
     }
     b = rbt_fix(b);
     return b;
 }
 
 /*Frees all memory the given rbt is using.
-  @param b is the rbt using the memory
-  @return the rbt using no memory
+  Parameters: b is the rbt using the memory
+  Returns: the rbt using no memory
  */
 rbt rbt_free(rbt b) {
     if (NULL == b) {
@@ -191,17 +188,14 @@ rbt rbt_free(rbt b) {
 /*Performs a given function on all items
   through preorder traversal (print used
   for this assignment).
-  @param b is rbt to traverse
-  @f is the function to perform
+  Parameters: b is rbt to traverse
+  Parameters: f is the function to perform
 */
 void rbt_preorder(rbt b, void f(char *str1)) {
-    int i;
     if (NULL == b) {
         return;
     }
-    for (i = 0; i < b->count; i++) {
-        f(b->key);
-    }
+    f(b->key);
     rbt_preorder(b->left,f);
     rbt_preorder(b->right,f);
 }

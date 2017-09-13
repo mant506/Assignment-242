@@ -1,5 +1,5 @@
-#include <stdio.h> /* for fprintf */
-#include <stdlib.h> /* for size_t, malloc, realloc, exit */
+#include <stdio.h> 
+#include <stdlib.h> 
 #include <time.h>
 #include <assert.h>
 #include <ctype.h>
@@ -7,20 +7,18 @@
 #include "htable.h"
 #include "container.h"
 
-#define DEFAULT_SIZE 3877
+#define DEFAULT_SIZE 3877 /*Default Hash Table Size. */
 
-clock_t start, end;
-double fill_time;
-double search_time;
-int unknown_words = 0;
-char word[256];
+double fill_time; /*Time taken to fill the hash table. */
+double search_time; /*Time taken to seaxrch htable. */
+int unknown_words; /*Number of words searched for but not found in the htable. */
 
 
 /*Error checking method for allocating memory.
   Prints error message to stderr if failed and
   exits the program.
-  @param s is the size of memory to allocate
-  @return the memory space
+  Parameter: s the size of memory to be allocated in bytes.
+  Returns: A pointer to the memory allocated by call to malloc.
  */
 void *emalloc(size_t s) {
     void *result = malloc(s);
@@ -32,9 +30,10 @@ void *emalloc(size_t s) {
 }
 
 /*Error checking method for re-allocating memory.
-  Prints error message to stderr if failed
-  @param s is the size of memory to allocate
-  @return the memory space
+  Prints error message to stderr if failed and exits program.
+  Parameters: *p a pointer to an existing memory block.
+  Parameters: s the size of memory to be allocated in bytes.
+  Returns: A pointer to the memory allocated by call to malloc.
 */
 void *erealloc(void *p, size_t s) {
     void *result = realloc(p,s);
@@ -46,19 +45,19 @@ void *erealloc(void *p, size_t s) {
 }
 
 /*Prints a given word using printf.
-  @param s is the word to print
+  Parameters: s the word to print
  */
 void print_word(char *s) {
     printf("%s ", s);
 }
 
-/*Takes a word, its size and an input stream
-  @param s is the word
-  @param limit is amount of letters
-  @param stream is the input file
-  @return the word returned
+/*Gets a word from an input stream.
+  Parameters: s is the word.
+  Parameters: limit is amount of letters.
+  Parameters: stream is the input file.
+  Returns: ??.
  */
-int getword(char *s, int limit, FILE *stream) {
+static int getword(char *s, int limit, FILE *stream) {
     int c;
     char *w = s;
     assert(limit > 0 && s != NULL && stream != NULL);
@@ -83,122 +82,125 @@ int getword(char *s, int limit, FILE *stream) {
     return w - s;
 }
 
-/*Prints three variables with headers for each.
-  @param key is a string that represents a key for a hashtable
-  @param colour is a string representing the colour of a node
-  @param count is the count associated with the key
+/*Prints a help message to show  command line arguments if passed value 1.
+  Parameters: option represents whether user as selected the help option.
+              1 means the user has selected this option. 0 means the user hasn't.
  */
-void print_colour_key_count(char *key, char *colour, int count) {
-    printf("Colour: %s, Key: %s, Count: %d\n", colour, key, count);
-}
-
-/*Prints help message to show the command line options.
- */
-void print_help() {
-    printf("Command Line Arguments: \n\
+void print_help(int option) {
+    if (option == 1) {
+        fprintf(stderr, "Command Line Arguments: \n\
 -r: \t Initialises hashtabe with Red-Black-Tree container type. \n\
 -s: \t Sets the size of hashtable to int argument 'table size'. \n\
 -i: \t Prints search and fill time info with a list of unknown words. \n\
 -p: \t Prints the contents of hashtable with the index of each container.\n\
 -h: \t Prints this help message.\n");
-}
-
-/*Sets the container type to a RBT and prints
-  any misspelt words.
-  @param t is the htable being used
-  @param infile is input file
- */
-void robust_opt(htable t, FILE *infile) {
-    printf("Robust option selected\n");
-    start = clock();
-    while (getword(word, sizeof word, infile) != EOF) {
-        htable_insert(t, word, 'r');
-    }
-    printf("Words inserted\n");
-    end = clock();
-    fill_time = (end-start) / (double)CLOCKS_PER_SEC;
-    start = clock();
-    while (getword(word, sizeof word, stdin) != EOF) {  
-        if (htable_search(t, word) == 0) {
-            if (unknown_words == 0) {
-                printf("Unknown words:\n");
-            }
-            unknown_words++;
-            printf(word);
-            printf("\n");
-        }
-    }
-    if (unknown_words > 0) {
-        printf("\n");
+        exit(EXIT_SUCCESS);
     }
     
-    end = clock();
-    search_time = (end-start) / (double)CLOCKS_PER_SEC;
+}
+/*Opens a given file with the passed filename.
+  Parameters: filename the name of the file to be opened.
+  Returns: the opened file.
+  Exits the program if a file with the filename doesn't exist.
+ */
+
+FILE *open_file(char *filename) {
+    FILE *infile = NULL;
+    if (NULL == (infile = fopen(filename, "r"))) {
+        fprintf(stderr, "./asgn: can't find file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    printf("Opened %s successfully\n", filename);
+    return infile;
 }
 
-/*Sets the container type to a flexarray and prints
-  any misspelt words.
-  @param t is the htable being used
-  @param infile is input file
-*/
-void flex_opt(htable h, FILE *infile) {
-    printf("flexarry option selected\n");
+/*Reads words in from a passed filed and inserts them into the passed Hash Table.
+  Parameters: t the table which words are to be inserted into.
+  Parameters: container_type the type of container which the htable will
+              insert words into 1 indicates the container_type to be a red
+              black tree, 0 indicates a flexarray.
+  Returns: infile the file from which words are to be read.
+ */
+
+void insert_words_into_htable(htable t, int container_type, FILE *infile) {
+    clock_t start, end;
+    char word[256];
     start = clock();
-    while (getword(word, sizeof word, infile) != EOF) {
-        htable_insert(h, word, 'f');
-    }
-    printf("Words inserted\n");
-    end = clock();
-    fill_time = (end-start) / (double)CLOCKS_PER_SEC;
-    start = clock();
-    while (getword(word, sizeof word, stdin) != EOF) {  
-        if (htable_search(h, word) == 0) {
-            if (unknown_words == 0) {
-                printf("Unknown words:\n");
-            }
-            unknown_words++;
-            printf(word);
-            printf("\n");
+    if (container_type == 1) {
+        while (getword(word, sizeof word, infile) != EOF) {
+            htable_insert(t, word, 'r');
+        }
+    } else {
+        while (getword(word, sizeof word, infile) != EOF) {
+            htable_insert(t, word, 'f');
         }
     }
-    if (unknown_words > 0) {
-        printf("\n");
-    }
     end = clock();
-    search_time = (end-start) / (double)CLOCKS_PER_SEC;
+    fill_time = (end-start) / (double)CLOCKS_PER_SEC;
+    
 }
 
 /*Prints out the htable using htable_print method.
-  @param h is the htable being printed
+  Parameters: h is the htable being printed.
+  Parameters: option is 1 if user wants to print htable
+              or 0 if user doesn't.
  */
-void print_hash(htable h) {
-    printf("Hashtable contents: \n");
-    htable_print(h, stdout);
-    printf("\n");
+void print_hashtable(htable t, int option ) {
+    if (option == 1) {
+        htable_print(t, stdout);
+    }
 }
 
-/*Prints info about search and fill times and unknown words.
+/* Searches the passed htable if the user doesn't want to print
+   the contents of the htable.
+   Parameters: t the htable to search.
+   Parameters: print_option set to 1 if user wants to print contents
+               of htable or 0 if user doesn't.
  */
-void print_info() {
-    printf("Fill time :\t%f\nSearch time :\t%f\nUnknown words : %d\n",
-           fill_time, search_time,unknown_words);
+
+void search_htable_for_words(htable t, int print_option) {
+    clock_t start, end;
+    char word[256];
+    unknown_words = 0;
+    if (print_option == 0) {
+        start = clock();
+        while (getword(word, sizeof word, stdin) != EOF) {  
+            if (htable_search(t, word) == 0) {
+                unknown_words++;
+            }
+        }
+        end = clock();
+        search_time = (end-start) / (double)CLOCKS_PER_SEC;
+    }
+}
+
+/*Prints the time taken to fill and search the htable and the number
+  of entered words that were not found in the htable.
+  Parameters: info_option set to 1 if user wants to print hash table stats
+              or 0 if user doesn't.
+  Parameters: print_option if set to 1 if user can't print hash
+              table stats.
+ */
+void print_info(int info_option, int print_option) {
+    if (print_option == 0 && info_option == 1) { 
+        fprintf(stderr, "Fill time :\t%f\nSearch time :\t%f\nUnknown words : %d\n",
+                fill_time, search_time,unknown_words);
+    }
 }
 
 /*Creates and returns an htable of either default
   size or input size.
-  @param i is input size
-  @return t is the htable
+  Parameters: i is input size.
+  Returns: t is the htable.
  */
-htable table_size_set(int i) {
+htable set_table_size(int table_size) {
     htable t;
-    if (i != 0) {
-        t = htable_new(i);
-        printf("Table size set to %d\n", i);
-    } else {
+    if (table_size == 0) {
         t = htable_new(DEFAULT_SIZE);
-        printf("Table size set to %d\n", DEFAULT_SIZE);
+        printf("Table size set to DEFAULT_SIZE\n");
+    } else {
+        t = htable_new(table_size);
+        printf("Table size set to %d\n", table_size);
     }
-
-    return t;
-    
+    return t;  
 }
