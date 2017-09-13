@@ -1,3 +1,8 @@
+/* Cosc242 assignment.
+   Compares a text file against a dictionary and prints misspelt words.
+   11/09/17
+   @authors Taylor Manning, Callan Taylor, Luke Falvey
+*/
 #include "htable.h"
 #include "container.h"
 #include "mylib.h"
