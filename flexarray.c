@@ -1,28 +1,28 @@
 /* Flexarray functions used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+11/09/17
+@authors Taylor Manning, Callan Taylor, Luke Falvey
+    */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "mylib.h"
 #include "flexarray.h"
 
-/* Structure of a 'flexarray', holds variables
-   of capacity, itemcount and array of items.
- */
-struct flexarrayrec {
-    /* capacity is the amount of items the current items array can hold */
-    int capacity;
-    /* itemcount is the amount of items currently in the flexarray */
-    int itemcount;
-    /* items is the actual array of items */
-    char **items;
-};
+    /* Structure of a 'flexarray', holds variables
+       of capacity, itemcount and the array of items.
+    */
+    struct flexarrayrec {
+        /* capacity is the amount of items the current items array can hold */
+        int capacity;
+        /* itemcount is the amount of items currently in the flexarray */
+        int itemcount;
+        /* items is the actual array of items */
+        char **items;
+    };
 
 /* Creates new flexarray, initialises all the values and
-   allocates memory for the array of items
-   Returns the flexarray just created
+   allocates memory for the array of items.
+   @return the flexarray just created
 */
 flexarray flexarray_new() {
     flexarray result = emalloc(sizeof *result);
@@ -33,10 +33,10 @@ flexarray flexarray_new() {
 }
 
 
-/* Searches through a flexarray and returns whether an item is present
-   Input - f is the flexarray to search
-         - target is the item being searched for
-   Output- 1 if present, 0 if not
+/* Searches through a flexarray and returns whether an item is present.
+   @param f is the flexarray to search
+   @param target is the item being searched for
+   @return 1 if present, 0 if not
 */
 int flexarray_is_present(flexarray f, char *target) {
     int i;
@@ -48,9 +48,9 @@ int flexarray_is_present(flexarray f, char *target) {
     return 0;
 }
 
-/* Performs a given function on a given flexarray
-   Inputs - f is flexarray to visit
-   - function is the function to apply to each item
+/* Performs a given function on a given flexarray.
+   @param f is flexarray to visit
+   @param function is the function to apply to each item
 */
 void flexarray_visit(flexarray f, void func(char *str)) {
     int i;
@@ -62,8 +62,8 @@ void flexarray_visit(flexarray f, void func(char *str)) {
 /* Adds an item to array, if the array is full,
    then a new array of same size is appended to
    the end to allow room.
-   Input - f is the flexarray bein added to
-         - item is the string being added
+   @param f is the flexarray bein added to
+   @param item is the string being added
 */
 void flexarray_append(flexarray f, char *item) {
     if (f->itemcount == f->capacity) {
@@ -77,11 +77,10 @@ void flexarray_append(flexarray f, char *item) {
     f->itemcount++;
 }
 
-/* Frees all the memory the flex array is using
-   Input - f is the flexarray using the memory
+/* Frees all the memory the flex array is using.
+   @param f is the flexarray using the memory
 */
 void flexarray_free(flexarray f) {
-    /* free the memory associated with the flexarray */
     int i;
     for (i = 0; i < f->itemcount; i++) {
     	free(f->items[i]);

@@ -72,13 +72,12 @@ void container_free(container c) {
   rbt_search and flexarray_is_present appropriately.
   @param c is container to search
   @param target is the string to search for
- */
+*/
 int container_search(container c, char *target) {
     if (c->type == RED_BLACK_TREE) {
         return rbt_search(c->contents, target);
-    } else {
-        return flexarray_is_present(c->contents, target);
     }
+    return flexarray_is_present(c->contents, target);
 }
 
 /*Prints contents of the container by referencing

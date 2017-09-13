@@ -10,53 +10,22 @@
 #define DEFAULT_SIZE 3877
 
 
-/*
-int main (void) {
-    container c = container_new_rbt();
-    container_add(c, "Hi");
-    container_free(c);
-    return EXIT_SUCCESS;
-}
-
-
 int main (int argc, char **argv) {
+    /* Input file */
     FILE *infile;
-    htable t = htable_new(DEFAULT_SIZE);
-    char word[256];
-    if (argc > 1) {
-        if (NULL == (infile = fopen(argv[1], "r"))) {
-            fprintf(stderr, "%s: can't find file %s\n", argv[0], argv[1]);
-            return EXIT_FAILURE;
-        }
-        while (getword(word, sizeof word, infile) != EOF) {
-            htable_insert(t, word, 'r');
-        }
-        while (getword(word, sizeof word, stdin) != EOF) {
-            if (htable_search(t, word) != 1) {
-                printf("%s not spelt correctly\n", word);
-            }
-        }
-    }
-    htable_free(t);
-    return EXIT_SUCCESS;
-}
-*/
-
-int main (int argc, char **argv) {
-    FILE *infile;
+    /* First command line argument */
     char *filename = argv[1];
+    /* Htable being used */
     htable t;
+    /* Option string */
     const char *optstring = "rs:pih";
+    /* Option used for switch cases */
     char option;
-    clock_t start, end;
-    double fill_time;
-    double search_time;
-    int unknown_words = 0;
-    char word[256];
+    /* Table size */
+    int size = 0;
 
     /*--- Command Line Flags---*/
     int robust = 0;
-    int table_size = 0;
     int print = 0;
     int info = 0;
     int help = 0;
@@ -69,7 +38,7 @@ int main (int argc, char **argv) {
                     help = 1;
                     break;
                 case 's':
-                    table_size = 1;
+                    size = atoi(optarg);
                     break;
                 case 'r':
                     robust = 1;
@@ -86,97 +55,54 @@ int main (int argc, char **argv) {
         }
     }
     
-    if (help == 1) {
-        fprintf(stderr, "How to use the program...\n");
-        return EXIT_SUCCESS;
-    }
+    /* Error fiding file, return filename so user can check*/
     if (NULL == (infile = fopen(filename, "r"))) {
         fprintf(stderr, "%s: can't find file %s\n", argv[0], filename);
         return EXIT_FAILURE;
     }
+    /*File open success*/
     printf("Opened %s successfully\n", filename);
-    if (table_size != 0) {
-        t = htable_new(table_size);
-        printf("Table size set to %d\n", table_size);
-    } else {
-        t = htable_new(DEFAULT_SIZE);
-        printf("Table size set to %d\n", DEFAULT_SIZE);
-    }
-    if (info == 1) {
-        if (robust == 1) {
-            printf("Robust option selected\n");
-            start = clock();
-            while (getword(word, sizeof word, infile) != EOF) {
-                htable_insert(t, word, 'r');
-            }
-            printf("Words inserted\n");
-            end = clock();
-            fill_time = (end-start) / (double)CLOCKS_PER_SEC;
-            if (print == 1) {
-                printf("Print hash table info to stdout\n");
-                htable_print(t, stdout);
-            }
-            start = clock();
-            while (getword(word, sizeof word, stdin) != EOF) {
-                if (htable_search(t, word) == 0) {
-                    unknown_words++;
-                    printf("%s not spelt correctly\n", word);
-                }
-            }
-            end = clock();
-            search_time = (end-start) / (double)CLOCKS_PER_SEC;
-        } else {
-            printf("Flexarray option being used\n");
-            start = clock();
-            while (getword(word, sizeof word, infile) != EOF) {
-                htable_insert(t, word, 'f');
-            }
-            printf("Words inserted\n");
-            end = clock();
-            fill_time = (end-start) / (double)CLOCKS_PER_SEC;
-            if (print == 1) {
-                printf("Print hash table info to stdout\n");
-                htable_print(t, stdout);
-            }
-            start = clock();
-            while (getword(word, sizeof word, stdin) != EOF) {
-                if (htable_search(t, word) == 0) {
-                    unknown_words++;
-                    printf("%s not spelt correctly\n", word);
-                }
-            }
-            end = clock();
-            search_time = (end-start) / (double)CLOCKS_PER_SEC;
-        }
-        printf("Fill time :\t%f\nSearch time :\t%f\nUnknown words : %d\n", fill_time, search_time,unknown_words);
-    } else {
-        if (robust == 1) {
-            printf("Robust option selected\n");
-            while (getword(word, sizeof word, infile) != EOF) {
-                htable_insert(t, word, 'r');
-            }
-            printf("Words inserted\n");
-            if (print == 1) {
-                printf("Print hash table info to stdout\n");
-                htable_print(t, stdout);
-            }
-        } else {
-            printf("Flexarray option being used\n");
-            while (getword(word, sizeof word, infile) != EOF) {
-                htable_insert(t, word, 'f');
-            }
-            printf("Words inserted\n");
-            if (print == 1) {
-                printf("Print hash table info to stdout\n");
-                htable_print(t, stdout);
-            }
-        }
+
+
+    
+    /* ------- Command Line Options ------- */    
+
+    /* Prints help message */
+    if (help == 1) {
+        print_help();
+        return EXIT_SUCCESS;
     }
 
-    /* if search = 0 instaed != 1 */
+    /*Calls table_size_set to set the size of the table.*/
+    t = table_size_set(size);
+
+    /* Calls robust_opt to set the container type to a Red Black Tree,
+       and prints any misspelt words. */
+    if (robust == 1) {
+        robust_opt(t, infile);
+    }
+    
+    /* Calls flex_opt to set the container type to Flexarray,
+     and prints any misspelt words.*/
+    else {
+        flex_opt(t, infile);
+    }
+       
+    /* Print htable to stdout one line per non-empty container.
+       Does not read anything from stdin or ptint anything else. */
+    if (print == 1) {
+        print_hash(t);
+    }
+
+    /*Calls print_info to print info on search and fill times
+      and unknown words.*/
+    else if (info == 1) {
+        print_info();
+    }
+
     printf("Insert and Search Complete\n");
+    
     fclose(infile);
     htable_free(t);
     return EXIT_SUCCESS;
 }
-

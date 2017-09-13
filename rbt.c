@@ -48,10 +48,12 @@ rbt rbt_new() {
 int rbt_search(rbt b, char *str) {
     if (NULL == b) {
         return 0;
+    } else if (strcmp(b->key, str) == 0) {
+        return 1;
     }  else if (strcmp(b->key,str) > 0) {
-        rbt_search(b->left,str);
+        return rbt_search(b->left,str);
     } else if (strcmp(b->key,str) < 0) {
-        rbt_search(b->right,str);
+        return rbt_search(b->right,str);
     }
     return 1;
 }
