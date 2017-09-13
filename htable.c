@@ -131,6 +131,9 @@ void htable_print(htable h, FILE *stream) {
  */
 int htable_search(htable h, char *str) {
     unsigned int index = htable_word_to_int(str) % h->capacity;
-    return container_search(h->containers[index], str);
+    if (h->containers[index] != NULL) {
+        return container_search(h->containers[index], str);
+    }
+    return 0;
 }
 
