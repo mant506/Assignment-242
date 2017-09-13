@@ -83,5 +83,6 @@ void flexarray_free(flexarray f) {
     for (i = 0; i < f->itemcount; i++) {
     	free(f->items[i]);
     }
+    free(f->items);
     free(f);
 }
