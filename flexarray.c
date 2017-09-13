@@ -1,24 +1,24 @@
 /* Flexarray functions used in cosc242 assignment
-11/09/17
-Authors Taylor Manning, Callan Taylor, Luke Falvey
-    */
+   11/09/17
+   Authors Taylor Manning, Callan Taylor, Luke Falvey
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "mylib.h"
 #include "flexarray.h"
 
-    /* Structure of a 'flexarray', holds variables
-       of capacity, itemcount and the array of items.
-    */
-    struct flexarrayrec {
-        /* capacity is the amount of items the current items array can hold. */
-        int capacity;
-        /* itemcount is the amount of items currently in the flexarray. */
-        int itemcount;
-        /* items is the actual array of items. */
-        char **items;
-    };
+/* Structure of a 'flexarray', holds variables
+   of capacity, itemcount and the array of items.
+*/
+struct flexarrayrec {
+    /* capacity is the amount of items the current items array can hold. */
+    int capacity;
+    /* itemcount is the amount of items currently in the flexarray. */
+    int itemcount;
+    /* items is the actual array of items. */
+    char **items;
+};
 
 /* Creates new flexarray, initialises all the values and
    allocates memory for the array of items.

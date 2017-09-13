@@ -45,18 +45,18 @@ int main (int argc, char **argv) {
                     info = 1;
                     break;
                 default:
-                    printf("Invalid command line argument\n");
+                    break;
             }
         }
-    }   
-    print_help(help);
-    infile = open_file(filename);
-    t = set_table_size(table_size);
-    insert_words_into_htable(t, container_type, infile);
-    print_hashtable(t, print);
-    search_htable_for_words(t, print);
-    print_info(info, print);
-    fclose(infile);
-    htable_free(t);
+        print_help(help);
+        infile = open_file(filename);
+        t = set_table_size(table_size);
+        insert_words_into_htable(t, container_type, infile);
+        print_hashtable(t, print);
+        search_htable_for_words(t, print);
+        print_info(info, print);
+        fclose(infile);
+        htable_free(t);
+    }
     return EXIT_SUCCESS;
 }
