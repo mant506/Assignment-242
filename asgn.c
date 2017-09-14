@@ -1,31 +1,36 @@
-/* Cosc242 assignment.
-   Reads in a text file and stores it in a hash table.
-   Command line options then allow the user to: print the
-   contents of the hash table, search for words in the
-   hash table, and print out information on how long it took
-   to fill and search the hash table, and the number of
-   words were in their search.
-   11/09/17
-   Authors: Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/*  Cosc242 assignment.
+ *  Reads in a text file and stores it in a hash table.
+ *  Command line options then allow the user to: print the
+ *  contents of the hash table, search for words in the
+ *  hash table, and print out information on how long it took
+ *  to fill and search the hash table, and the number of
+ *  words were in their search.
+ *  11/09/17
+ *  Authors: Taylor Manning, Callan Taylor, Luke Falvey
+ */
+#include <string.h>
 #include "htable.h"
 #include "mylib.h"
 #include <getopt.h>
 
 int main (int argc, char **argv) {
-    FILE *infile;
-    char *filename = argv[1];
-    htable t;
+    FILE *infile; /* File to be read in from stdin. */
+    char *filename = argv[1]; /* Name of the file to be read from stdin. */
+    htable t; /*Hash table used to store words. */
+    const char *optstring = "rs:pih"; /* Allowed command line arguements. */
+    char option; /* Used to store each command line arguement. */
+    int table_size = 0; /* Used to store table size if specified. */
+    int index; /* Stores index of non-option arguements - including
+                  the index of the .txt file used to fill hash table. */
     
-    const char *optstring = "rs:pih";
-    char option;
-    int table_size = 0;
     /*--- Command Line Flags---*/
-    int container_type = 0;
-    int print = 0;
-    int info = 0;
-    int help = 0;
-    /*---                   ---*/ 
+    unsigned int container_type = 0;
+    unsigned int print = 0;
+    unsigned int info = 0;
+    unsigned int help = 0;
+    /*---                   ---*/
+
+    /* Sets flags according to command line arguements */
     if (argc > 1) {
         while ((option = getopt(argc, argv, optstring)) != EOF) {
             switch (option) {
@@ -48,6 +53,20 @@ int main (int argc, char **argv) {
                     break;
             }
         }
+        /* Processes remaining non-option command line arguments
+         * including .txt file used to fill the hash table
+         */
+        for (index = optind; index < argc; index++) {
+            if (strstr(argv[index], ".txt") != NULL) {
+                filename = argv[index];
+            } else {
+                printf ("Non-option argument %s\n", argv[index]);
+                return EXIT_FAILURE;
+            }
+        }
+        /* Following methods are executed based on command line flags set. 
+         * Methods are defined in mylib.c and htable.c.
+         */
         print_help(help);
         infile = open_file(filename);
         t = set_table_size(table_size);

@@ -1,15 +1,15 @@
 /* Container functions used in cosc242 assignment
-   11/09/17
-   Authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+ *  11/09/17
+ *  Authors Taylor Manning, Callan Taylor, Luke Falvey
+ */
 #include "mylib.h"
 #include "flexarray.h"
 #include "rbt.h"
 #include "container.h"
 
-/*Structure of container, holds
-  variables of the container type
-  and its contents
+/* Structure of container, holds
+ * variables of the container type
+ * and its contents
  */
 struct containerrec {
     /* Type of container */
@@ -18,11 +18,11 @@ struct containerrec {
     void *contents;
 };
 
-/*Function inserts a word into specified container
-  using the rbt_insert or flexarray_append
-  functions appropriately.
-  Parameters: c is container being inserted into
-  Parameters: word is the word to be inserted
+/* Function inserts a word into specified container
+ * using the rbt_insert or flexarray_append
+ * functions appropriately.
+ * Parameters: c is container being inserted into
+ * Parameters: word is the word to be inserted
  */
 void container_add(container c, char *word) {
     if (c->type == RED_BLACK_TREE) {
@@ -32,10 +32,11 @@ void container_add(container c, char *word) {
     }
 }
 
-/*Creates new container of type rbt,
-  initialises the variables and
-  allocates memory.
-  Returns: result is the new container
+
+/* Creates new container of type rbt,
+ * initialises the variables and
+ * allocates memory.
+ * Returns: result is the new container
  */
 container container_new_rbt() {
     container result = emalloc (sizeof *(result));
@@ -44,11 +45,11 @@ container container_new_rbt() {
     return result;
 }
 
-/*Creates new container of type flexarray,
-  initialises the variables and
-  allocates memory.
-  Returns: result is the new container
-*/
+/* Creates new container of type flexarray,
+ * initialises the variables and
+ * allocates memory.
+ * Returns: result is the new container
+ */
 container container_new_flexarray() {
     container result = emalloc (sizeof *(result));
     result->type = FLEX_ARRAY;
@@ -56,8 +57,8 @@ container container_new_flexarray() {
     return result;
 }
 
-/*Frees all memory the container is using
-  Parameters: c is the container to free
+/* Frees all memory the container is using
+ * Parameters: c is the container to free
  */
 void container_free(container c) {
     if (c->type == RED_BLACK_TREE) {
@@ -68,11 +69,11 @@ void container_free(container c) {
     free(c);
 }
 
-/*Searches the container for a word by using
-  rbt_search and flexarray_is_present appropriately.
-  Parameters: c is container to search
-  Parameters: target is the string to search for
-*/
+/* Searches the container for a word by using
+ * rbt_search and flexarray_is_present appropriately.
+ * Parameters: c is container to search
+ * Parameters: target is the string to search for
+ */
 int container_search(container c, char *target) {
     if (c->type == RED_BLACK_TREE) {
         return rbt_search(c->contents, target);
@@ -80,11 +81,11 @@ int container_search(container c, char *target) {
     return flexarray_is_present(c->contents, target);
 }
 
-/*Prints contents of the container by referencing
-  rbt_preorder and flexarray_visit appropriately/
-  Parameters: c is container to print
-  Parameters: f will take the print function to be used
-*/
+/* Prints contents of the container by referencing
+ * rbt_preorder and flexarray_visit appropriately/
+ * Parameters: c is container to print
+ * Parameters: f will take the print function to be used
+ */
 void container_print(container c, void f(char *word)) {
     if (c->type == RED_BLACK_TREE) {
         rbt_preorder(c->contents, f);

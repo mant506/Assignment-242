@@ -1,7 +1,7 @@
-/* Header file for htable.c used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/* Header file for htable.c.
+ * 11/09/17.
+ * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
+ */
 #ifndef HTABLE_H_
 #define HTABLE_H_
 

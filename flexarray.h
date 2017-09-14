@@ -1,7 +1,7 @@
-/* Header file for flexarray.c used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/* Header file for flexarray.c.
+ * 11/09/17.
+ * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
+ */
 #ifndef FLEXARRAY_H_
 #define FLEXARRAY_H_
 

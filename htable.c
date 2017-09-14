@@ -1,7 +1,7 @@
 /* Hashtable functions used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+ * 11/09/17
+ * Authors Taylor Manning, Callan Taylor, Luke Falvey
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,8 +11,8 @@
 #include "container.h"
 
 /* Structure of a 'htable' to hold
-   variables of capacity, number of keys,
-   array of frequencies and array of containers.
+ * variables of capacity, number of keys,
+ * array of frequencies and array of containers.
  */
 struct htablerec {
     /* array of containers is the basis of the htable*/
@@ -26,9 +26,9 @@ struct htablerec {
 };
 
 
-/*Converts the key to appropriate index position.
-  @param word is the string to convert to index
-  @return is the index
+/* Hashing function: Returns an index in the htable for a given word.
+ * Parameters: word string used to generate an index.
+ * Returns: result generated index.
  */
 static unsigned int htable_word_to_int(char *word) {
     unsigned int result = 0;
@@ -39,9 +39,10 @@ static unsigned int htable_word_to_int(char *word) {
 }
 
 /* Creates new hashtable, initialises all the values and
-   allocates memory for the arrays
-   Returns the hashtable just created
-*/
+ * allocates memory for the arrays.
+ * Parameters: capacity the capacity of the new htable.
+ * Returns the hashtable just created.
+ */
 htable htable_new(int capacity) {
     int i;
     htable result = emalloc(sizeof *(result));
@@ -57,8 +58,8 @@ htable htable_new(int capacity) {
 }
 
 /*Frees all memory that the htable is using
-  through the container_free function
-  @param h is the htable to free
+  through the container_free function.
+  Parameters: h is the htable to free.
  */
 void htable_free(htable h) {
     unsigned int i;
@@ -73,14 +74,11 @@ void htable_free(htable h) {
 }
 
 /*Inserts an item into htable container at the index
-  returned by htable_word_to_int, unless full. If
-  full, searches through htable by htable_step until
-  an empty or matching point is found.
-  
-  @param h is the htable being inserted into
-  @param str is the string to insert
-  @param container_type is the type of container to use
-  @return 1 if insertion was effective, 0 if not
+  returned by htable_word_to_int, unless full
+  Parameters: h is the htable being inserted into
+  Parameters: str is the string to insert
+  Parameters: container_type is the type of container to use
+  Returns: 1 if str was inserted, 0 if not
  */
 int htable_insert(htable h, char *str, char container_type) {
     
@@ -108,8 +106,8 @@ int htable_insert(htable h, char *str, char container_type) {
 /* Calls container print on containers in the htable with
    correspondiing frequencies beforehand. Container print will
    print all items in container.
-   @param h is htable to be printed
-   @param stream is where to print to
+   Parameters: h is htable to be printed
+   Parameters: stream is where to print to
  */
 void htable_print(htable h, FILE *stream) {
     unsigned int i;
@@ -125,9 +123,9 @@ void htable_print(htable h, FILE *stream) {
 /*Searches the given htbale for a string and
   returns 0 if not found in any containers
   and if found, frequency is returned
-  @param h is htable to be searched
-  @param str is string to search for
-  @return 0 if not found, otherwise frequency of the string
+  Parameters: h is htable to be searched
+  Parameters: str is string to search for
+  Returns: 0 if not found, otherwise frequency of the string
  */
 int htable_search(htable h, char *str) {
     unsigned int index = htable_word_to_int(str) % h->capacity;

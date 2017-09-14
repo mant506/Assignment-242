@@ -1,7 +1,7 @@
-/* Header file for rbt.c used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/* Header file for rbt.c.
+ * 11/09/17.
+ * Authors Taylor Manning, Callan Taylor, Luke Falvey.
+ */
 #ifndef RBT_H
 #define RBT_H
 

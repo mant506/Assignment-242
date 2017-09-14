@@ -1,7 +1,7 @@
-/* Header file for mylib.c used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/* Header file for mylib.c.
+ * 11/09/17.
+ * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
+ */
 #ifndef MYLIB_H_
 #define MYLIB_H_
 
@@ -15,7 +15,8 @@ extern void *erealloc(void *, size_t);
 extern void print_word(char *s);
 extern void print_help(int option);
 extern FILE * open_file(char *filename);
-extern void insert_words_into_htable(htable t, int container_type, FILE *infile);
+extern void insert_words_into_htable(htable t,
+                                       int container_type, FILE *infile);
 extern void search_htable_for_words(htable t, int print_option);
 extern void print_hashtable(htable h, int option);
 extern void print_info(int info_option, int print_option);

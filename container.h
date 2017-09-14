@@ -1,7 +1,7 @@
-/* Header file for container.c used in cosc242 assignment
-   11/09/17
-   @authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+/* Header file for container.c
+ * 11/09/17
+ * Authors: Taylor Manning, Callan Taylor, Luke Falvey
+ */
 #ifndef CONTAINER_H_
 #define CONTAINER_H_
 

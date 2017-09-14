@@ -1,7 +1,7 @@
 /* RBT (red black tree) functions used in cosc242 assignment
-   11/09/17
-   Authors Taylor Manning, Callan Taylor, Luke Falvey
-*/
+ * 11/09/17
+ * Authors Taylor Manning, Callan Taylor, Luke Falvey
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,11 +13,11 @@
 
 typedef enum { RED, BLACK } rbt_colour;
 
-/*Structure of rbt, holds
-  variables of the key that references
-  the tree, color of the base node,
-  black count, and the children nodes.
-*/
+/* Structure of rbt, holds
+ * variables of the key that references
+ * the tree, color of the base node,
+ * black count, and the children nodes.
+ */
 struct rbt_node {
     /* The key that references the rbt. */
     char *key;
@@ -29,19 +29,19 @@ struct rbt_node {
     rbt right;
 };
 
-/*Creates new rbt, assigns root to null.
-  Returns: new is the rbt
+/* Creates new rbt, assigns root to null.
+ * Returns: new is the rbt
  */
 rbt rbt_new() {
     rbt new = NULL;
     return new;
 }
 
-/*Recursively searches through a rbt for a
-  given string and determines if present.
-  Parameters: b is the rbt to search
-  Parameters: str is the string to search for
-  Returns: 1 if found, 0 if not
+/* Recursively searches through a rbt for a
+ * given string and determines if present.
+ * Parameters: b is the rbt to search
+ * Parameters: str is the string to search for
+ * Returns: 1 if found, 0 if not
  */
 int rbt_search(rbt b, char *str) {
     if (NULL == b) {
@@ -56,9 +56,9 @@ int rbt_search(rbt b, char *str) {
     return 1;
 }
 
-/*Rotates the rbt to the right.
-  Parameters: b is the rbt to rotate
-  Returns: the updated rbt
+/* Rotates the rbt to the right.
+ * Parameters: b is the rbt to rotate
+ * Returns: the updated rbt
  */
 static rbt right_rotate(rbt b) {
     rbt temp = b;
@@ -67,9 +67,9 @@ static rbt right_rotate(rbt b) {
     b->right = temp;
     return b;
 }
-/*Rotates the rbt to the left.
-  Parameters: b is the rbt to rotate
-  Returns: the updated rbt
+/* Rotates the rbt to the left.
+ * Parameters: b is the rbt to rotate
+ * Returns: the updated rbt
  */
 static rbt left_rotate(rbt b) {
     rbt temp = b;
@@ -79,20 +79,20 @@ static rbt left_rotate(rbt b) {
     return b;
 }
 
-/*Fixes the root to be black.
-  Parameters: b is the rbt to fix
-  Returns: is the fixed root
+/* Fixes the root to be black.
+ * Parameters: b is the rbt to fix
+ * Returns: is the fixed root
  */
 rbt root_fix(rbt b) {
     b->colour = BLACK;
     return b;
 }
 
-/*Fixes the colors of the rbt to
-  fit specifications of a rbt except
-  root being black.
-  Parameters: b is the rbt to fix
-  Returns: the fixed rbt
+/* Fixes the colors of the rbt to
+ * fit specifications of a rbt except
+ * root being black.
+ * Parameters: b is the rbt to fix
+ * Returns: the fixed rbt
  */
 static rbt rbt_fix(rbt b) {
     if (IS_RED(b->left) && IS_RED(b->left->left)) {
@@ -141,12 +141,12 @@ static rbt rbt_fix(rbt b) {
     return b;
 }
 
-/*Inserts a string into given rbt in
-  the appropriate position and
-  fixes to ensure the tree is correct.
-  Parameters: b is rbt to insert into
-  Parameters: str is the string to insert
-  Returns: the new rbt
+/* Inserts a string into given rbt in
+ * the appropriate position and
+ * fixes to ensure the tree is correct.
+ * Parameters: b is rbt to insert into
+ * Parameters: str is the string to insert
+ * Returns: the new rbt
  */
 rbt rbt_insert(rbt b, char *str) {
     if (NULL == b) {
@@ -168,9 +168,9 @@ rbt rbt_insert(rbt b, char *str) {
     return b;
 }
 
-/*Frees all memory the given rbt is using.
-  Parameters: b is the rbt using the memory
-  Returns: the rbt using no memory
+/* Frees all memory the given rbt is using.
+ * Parameters: b is the rbt using the memory
+ * Returns: the rbt using no memory
  */
 rbt rbt_free(rbt b) {
     if (NULL == b) {
@@ -185,12 +185,12 @@ rbt rbt_free(rbt b) {
 
 
 
-/*Performs a given function on all items
-  through preorder traversal (print used
-  for this assignment).
-  Parameters: b is rbt to traverse
-  Parameters: f is the function to perform
-*/
+/* Performs a given function on all items
+ * through preorder traversal (print used
+ * for this assignment).
+ * Parameters: b is rbt to traverse
+ * Parameters: f is the function to perform
+ */
 void rbt_preorder(rbt b, void f(char *str1)) {
     if (NULL == b) {
         return;
