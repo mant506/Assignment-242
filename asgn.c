@@ -13,13 +13,15 @@
 #include "mylib.h"
 #include <getopt.h>
 
+#define DEFAULT_SIZE 3877 /*Default Hash Table Size. */
+
 int main (int argc, char **argv) {
     FILE *infile; /* File to be read in from stdin. */
     char *filename = argv[1]; /* Name of the file to be read from stdin. */
     htable t; /*Hash table used to store words. */
     const char *optstring = "rs:pih"; /* Allowed command line arguements. */
     char option; /* Used to store each command line arguement. */
-    int table_size = 0; /* Used to store table size if specified. */
+    int table_size = DEFAULT_SIZE; /* Used to store table size if specified. */
     int index; /* Stores index of non-option arguements - including
                   the index of the .txt file used to fill hash table. */
     

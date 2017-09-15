@@ -7,8 +7,6 @@
 #include "htable.h"
 #include "container.h"
 
-#define DEFAULT_SIZE 3877 /*Default Hash Table Size. */
-
 double fill_time; /*Time taken to fill the hash table. */
 double search_time; /*Time taken to seaxrch htable. */
 int unknown_words; /*Number of words searched for but not found in the htable.*/
@@ -111,7 +109,6 @@ FILE *open_file(char *filename) {
         fprintf(stderr, "./asgn: can't find file %s\n", filename);
         exit(EXIT_FAILURE);
     }
-    printf("Opened %s successfully\n", filename);
     return infile;
 }
 
@@ -162,10 +159,11 @@ void search_htable_for_words(htable t, int print_option) {
     clock_t start, end;
     char word[256];
     unknown_words = 0;
-    if (print_option == 0) {
+    if (print_option != 1) {
         start = clock();
         while (getword(word, sizeof word, stdin) != EOF) {  
             if (htable_search(t, word) == 0) {
+                fprintf(stdout, "%s\n", word);
                 unknown_words++;
             }
         }
@@ -183,7 +181,8 @@ void search_htable_for_words(htable t, int print_option) {
  */
 void print_info(int info_option, int print_option) {
     if (print_option == 0 && info_option == 1) { 
-        fprintf(stderr, "Fill time :\t%f\nSearch time :\t%f\nUnknown words : %d\n",
+        fprintf(stderr,
+                "Fill time :\t%f\nSearch time :\t%f\nUnknown words : %d\n",
                 fill_time, search_time,unknown_words);
     }
 }
@@ -195,12 +194,11 @@ void print_info(int info_option, int print_option) {
  */
 htable set_table_size(int table_size) {
     htable t;
-    if (table_size == 0) {
-        t = htable_new(DEFAULT_SIZE);
-        printf("Table size set to DEFAULT_SIZE\n");
-    } else {
+    if (table_size > 0) {
         t = htable_new(table_size);
-        printf("Table size set to %d\n", table_size);
+    } else {
+        fprintf(stderr, "Table Size must be greater than 0\n");
+        print_help(1);
     }
-    return t;  
+    return t;
 }
