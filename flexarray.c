@@ -1,4 +1,4 @@
-/* Flexarray functions used in cosc242 assignment
+/* Implemantation of header file for flexarray.
  * 11/09/17
  * Authors: Taylor Manning, Callan Taylor, Luke Falvey
  */
@@ -31,7 +31,6 @@ flexarray flexarray_new() {
     result->items = emalloc(result->capacity * sizeof result->items[0]);
     return result;
 }
-
 
 /* Searches through a flexarray and returns whether an item is present.
  * Parameters: f is the flexarray to search.

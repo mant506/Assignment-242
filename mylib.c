@@ -194,7 +194,7 @@ htable set_table_size(int table_size) {
     if (table_size > 0) {
         t = htable_new(table_size);
     } else {
-        fprintf(stderr, "Table Size must be greater than 0\n");
+        fprintf(stderr, "Table Size must be an int greater than 0\n");
         print_help(1);
     }
     return t;

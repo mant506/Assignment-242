@@ -1,4 +1,4 @@
-/* RBT (red black tree) functions used in cosc242 assignment
+/* Implemantation of the header file for red-black tree.
  * 11/09/17
  * Authors Taylor Manning, Callan Taylor, Luke Falvey
  */
@@ -67,6 +67,7 @@ static rbt right_rotate(rbt b) {
     b->right = temp;
     return b;
 }
+
 /* Rotates the rbt to the left.
  * Parameters: b is the rbt to rotate
  * Returns: the updated rbt
@@ -182,8 +183,6 @@ rbt rbt_free(rbt b) {
     free(b);
     return b;
 }
-
-
 
 /* Performs a given function on all items
  * through preorder traversal (print used

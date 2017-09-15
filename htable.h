@@ -1,4 +1,4 @@
-/* Header file for htable.c.
+/* Specifies the interface for hashtable.
  * 11/09/17.
  * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
  */

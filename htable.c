@@ -1,4 +1,4 @@
-/* Hashtable functions used in cosc242 assignment
+/* Implementation of the header file for hashtable.
  * 11/09/17
  * Authors Taylor Manning, Callan Taylor, Luke Falvey
  */
@@ -24,7 +24,6 @@ struct htablerec {
     /* Max capacity of htable */
     unsigned int capacity;
 };
-
 
 /* Hashing function: Returns an index in the htable for a given word.
  * Parameters: word string used to generate an index.
@@ -57,9 +56,9 @@ htable htable_new(int capacity) {
     return result;                       
 }
 
-/*Frees all memory that the htable is using
-  through the container_free function.
-  Parameters: h is the htable to free.
+/* Frees all memory that the htable is using
+ * through the container_free function.
+ * Parameters: h is the htable to free.
  */
 void htable_free(htable h) {
     unsigned int i;
@@ -73,13 +72,13 @@ void htable_free(htable h) {
     free(h);
 }
 
-/*Inserts an item into htable container at the index
-  returned by htable_word_to_int, unless full.
-  Parameters: h is the htable being inserted into.
-  Parameters: str is the string to insert.
-  Parameters: container_type is the type of container to use
-              1 uses an rbt. 0  uses a flexarray.
-  Returns: 1 if str was inserted, 0 if not
+/* Inserts an item into htable container at the index
+ * returned by htable_word_to_int, unless full.
+ * Parameters: h is the htable being inserted into.
+ * Parameters: str is the string to insert.
+ * Parameters: container_type is the type of container to use
+ *             1 uses an rbt. 0  uses a flexarray.
+ * Returns: 1 if str was inserted, 0 if not
  */
 int htable_insert(htable h, char *str, int container_type) {
     
@@ -99,10 +98,10 @@ int htable_insert(htable h, char *str, int container_type) {
 }
 
 /* Calls container print on containers in the htable with
-   correspondiing frequencies beforehand. Container print will
-   print all items in container.
-   Parameters: h is htable to be printed
-   Parameters: stream is where to print to
+ * correspondiing frequencies beforehand. Container print will
+ * print all items in container.
+ * Parameters: h is htable to be printed
+ * Parameters: stream is where to print to
  */
 void htable_print(htable h, FILE *stream) {
     unsigned int i;
@@ -115,12 +114,12 @@ void htable_print(htable h, FILE *stream) {
     }
 }
 
-/*Searches the given htbale for a string and
-  returns 0 if not found in any containers
-  and if found, frequency is returned
-  Parameters: h is htable to be searched
-  Parameters: str is string to search for
-  Returns: 0 if not found, otherwise frequency of the string
+/* Searches the given htbale for a string and
+ * returns 0 if not found in any containers
+ * and if found, frequency is returned
+ * Parameters: h is htable to be searched
+ * Parameters: str is string to search for
+ * Returns: 0 if not found, otherwise frequency of the string
  */
 int htable_search(htable h, char *str) {
     unsigned int index = htable_word_to_int(str) % h->capacity;

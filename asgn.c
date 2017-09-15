@@ -83,6 +83,8 @@ int main (int argc, char **argv) {
         print_info(info, print);
         fclose(infile);
         htable_free(t);
+    } else {
+        print_help(1);
     }
     return EXIT_SUCCESS;
 }

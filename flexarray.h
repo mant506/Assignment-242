@@ -1,4 +1,4 @@
-/* Header file for flexarray.c.
+/* Specifies the interface for flexarray.
  * 11/09/17.
  * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
  */
