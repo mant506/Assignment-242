@@ -1,4 +1,6 @@
-/* Header file for mylib.c.
+/* Specifies the interface for helper methods used for error checking,
+ * opening files and interacting with the htable based on command line
+ * arguments.
  * 11/09/17.
  * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
  */

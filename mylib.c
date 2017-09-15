@@ -1,3 +1,8 @@
+/* Implementation for the mylib interface
+ * 11/09/17.
+ * Authors: Taylor Manning, Callan Taylor, Luke Falvey.
+ */
+
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <time.h>
@@ -53,7 +58,7 @@ void print_word(char *s) {
  * Parameters: s is the word.
  * Parameters: limit is amount of letters.
  * Parameters: stream is the input file.
- * Returns: ??.
+ * Returns: the number of characters left in the file or an EOF.
  */
 static int getword(char *s, int limit, FILE *stream) {
     int c;
@@ -97,12 +102,12 @@ void print_help(int option) {
     }
     
 }
+
 /* Opens a given file with the passed filename.
  * Parameters: filename the name of the file to be opened.
  * Returns: the opened file.
  * Exits the program if a file with the filename doesn't exist.
  */
-
 FILE *open_file(char *filename) {
     FILE *infile = NULL;
     if (NULL == (infile = fopen(filename, "r"))) {
@@ -112,13 +117,12 @@ FILE *open_file(char *filename) {
     return infile;
 }
 
-/* Reads words in from a passed filed and inserts them into the passed Hash Table.
+/* Reads words from a passed file and inserts them into the passed Hash Table.
  * Parameters: t the table which words are to be inserted into.
  * Parameters: container_type the type of container which the htable will
  *             insert words into 1 indicates the container_type to be a red
  *             black tree, 0 indicates a flexarray.
  */
-
 void insert_words_into_htable(htable t, int container_type, FILE *infile) {
     clock_t start, end;
     char word[256];
@@ -148,7 +152,6 @@ void print_hashtable(htable t, int option ) {
  * Parameters: print_option set to 1 if user wants to print contents
  *             of htable or 0 if user doesn't.
  */
-
 void search_htable_for_words(htable t, int print_option) {
     clock_t start, end;
     char word[256];

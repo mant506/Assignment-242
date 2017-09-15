@@ -6,7 +6,7 @@
  *  to fill and search the hash table, and the number of
  *  words were in their search.
  *  11/09/17
- *  Authors: Taylor Manning, Callan Taylor, Luke Falvey
+ *  Authors: Taylor Manning, Callan Taylor, Luke Falvey.
  */
 #include <string.h>
 #include "htable.h"
@@ -17,7 +17,7 @@
 
 int main (int argc, char **argv) {
     FILE *infile; /* File to be read in from stdin. */
-    char *filename = argv[1]; /* Name of the file to be read from stdin. */
+    char *filename = NULL; /* Name of the file to be read from stdin. */
     htable t; /*Hash table used to store words. */
     const char *optstring = "rs:pih"; /* Allowed command line arguements. */
     char option; /* Used to store each command line arguement. */
@@ -32,7 +32,7 @@ int main (int argc, char **argv) {
     unsigned int help = 0;
     /*---                   ---*/
 
-    /* Sets flags according to command line arguements */
+    /* Sets flags according to option command line arguements. */
     if (argc > 1) {
         while ((option = getopt(argc, argv, optstring)) != EOF) {
             switch (option) {
@@ -56,13 +56,18 @@ int main (int argc, char **argv) {
             }
         }
         /* Processes remaining non-option command line arguments
-         * including .txt file used to fill the hash table
+         * including .txt file used to fill the hash table.
          */
         for (index = optind; index < argc; index++) {
-            if (strstr(argv[index], ".txt") != NULL) {
+            /* Checks for the .txt extension in the command line. */
+            if (strstr(argv[index], ".txt") != NULL) { 
                 filename = argv[index];
             } else {
-                printf ("Non-option argument %s\n", argv[index]);
+                /* Triggered if a command line option is unrecognised
+                 * Prints error message to stderr and prints help options.
+                 */
+                fprintf(stderr, "Non-option argument %s\n", argv[index]);
+                print_help(1);
                 return EXIT_FAILURE;
             }
         }
