@@ -74,27 +74,22 @@ void htable_free(htable h) {
 }
 
 /*Inserts an item into htable container at the index
-  returned by htable_word_to_int, unless full
-  Parameters: h is the htable being inserted into
-  Parameters: str is the string to insert
+  returned by htable_word_to_int, unless full.
+  Parameters: h is the htable being inserted into.
+  Parameters: str is the string to insert.
   Parameters: container_type is the type of container to use
+              1 uses an rbt. 0  uses a flexarray.
   Returns: 1 if str was inserted, 0 if not
  */
-int htable_insert(htable h, char *str, char container_type) {
+int htable_insert(htable h, char *str, int container_type) {
     
     unsigned int index = htable_word_to_int(str) % h->capacity;
-    /* container is empty */
-    if (h->containers[index] == NULL) { 
-        if (container_type == 'r') {    /* rbt */
-            h->containers[index] = container_new_rbt();
-        } else {                        /* flexarray */
-            h->containers[index] = container_new_flexarray();
-        }
+    if (h->containers[index] == NULL) {
+        h->containers[index] = container_new(container_type);
         container_add(h->containers[index], str); 
         h->frequencies[index] = 1;
         h->num_keys++;
         return 1;
-    /* if input is already in container */
     } else {
         container_add(h->containers[index], str);
         h->frequencies[index]++;

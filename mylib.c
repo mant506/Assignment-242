@@ -123,14 +123,8 @@ void insert_words_into_htable(htable t, int container_type, FILE *infile) {
     clock_t start, end;
     char word[256];
     start = clock();
-    if (container_type == 1) {
-        while (getword(word, sizeof word, infile) != EOF) {
-            htable_insert(t, word, 'r');
-        }
-    } else {
-        while (getword(word, sizeof word, infile) != EOF) {
-            htable_insert(t, word, 'f');
-        }
+    while (getword(word, sizeof word, infile) != EOF) {
+        htable_insert(t, word, container_type);
     }
     end = clock();
     fill_time = (end-start) / (double)CLOCKS_PER_SEC;

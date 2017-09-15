@@ -32,28 +32,19 @@ void container_add(container c, char *word) {
     }
 }
 
-
-/* Creates new container of type rbt,
- * initialises the variables and
- * allocates memory.
- * Returns: result is the new container
+/* Creates new container of type rbt or flexarray.
+ * Parameter: container_type, which is 1 for rbt or 0 for flexarray.
+ * Returns: result a  new container.
  */
-container container_new_rbt() {
+container container_new(int container_type) {
     container result = emalloc (sizeof *(result));
-    result->type = RED_BLACK_TREE;
-    result->contents = rbt_new();
-    return result;
-}
-
-/* Creates new container of type flexarray,
- * initialises the variables and
- * allocates memory.
- * Returns: result is the new container
- */
-container container_new_flexarray() {
-    container result = emalloc (sizeof *(result));
-    result->type = FLEX_ARRAY;
-    result->contents = flexarray_new();
+    if (container_type == 1) {
+        result->type = RED_BLACK_TREE;
+        result->contents = rbt_new();
+    } else {
+        result->type = FLEX_ARRAY;
+        result->contents = flexarray_new();
+    }
     return result;
 }
 

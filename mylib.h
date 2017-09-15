@@ -14,7 +14,7 @@ extern void *emalloc(size_t);
 extern void *erealloc(void *, size_t);
 extern void print_word(char *s);
 extern void print_help(int option);
-extern FILE * open_file(char *filename);
+extern FILE *open_file(char *filename);
 extern void insert_words_into_htable(htable t,
                                        int container_type, FILE *infile);
 extern void search_htable_for_words(htable t, int print_option);

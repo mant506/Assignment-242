@@ -10,7 +10,7 @@
 typedef struct htablerec *htable;
 
 extern void   htable_free(htable h);
-extern int    htable_insert(htable h, char *str, char container_type);
+extern int    htable_insert(htable h, char *str, int container_type);
 extern htable htable_new(int capacity);
 extern void   htable_print(htable h, FILE *stream);
 extern int    htable_search(htable h, char *str);
